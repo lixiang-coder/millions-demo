@@ -50,7 +50,15 @@ public class SalariesController {
 
     @PostMapping("import")
     public void importExcel(MultipartFile file) throws IOException {
+        // 方案一：
+        //  1.单线程逐行解析，单线程逐行插入库
+        //  1.单线程逐行解析，单线程批量插入库
 //        importService.importExcel(file);
+
+
+        // 方案二：
+        //  1.多线程解析（每个线程对应一个sheet），多线程逐行插入库
+        //  2.多线程解析（每个线程对应一个sheet），多线程批量插入库
         importService.importExcelAsync(file);
     }
 

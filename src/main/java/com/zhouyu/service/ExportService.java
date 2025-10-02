@@ -29,19 +29,23 @@ public class ExportService {
     @Resource
     private SalariesMapper salariesMapper;
 
+    /**
+     * 查全表、写入到一个sheet中
+     */
     public void exportExcel1(HttpServletResponse response) throws IOException {
-
         setExportHeader(response);
-
         List<Salaries> salaries = salariesMapper.selectList(null);
-
         EasyExcel.write(response.getOutputStream(), Salaries.class).sheet().doWrite(salaries);
     }
 
 
-
+    /**
+     * 查全表、写入多个sheet
+     *
+     * @param response
+     * @throws IOException
+     */
     public void exportExcel2(HttpServletResponse response) throws IOException {
-
         setExportHeader(response);
 
         List<Salaries> salaries = salariesMapper.selectList(null);
@@ -55,7 +59,6 @@ public class ExportService {
             List<Salaries> data2 = salaries.subList(salaries.size() / 3, salaries.size() * 2 / 3);
             List<Salaries> data3 = salaries.subList(salaries.size() * 2 / 3, salaries.size());
 
-
             excelWriter.write(data1, writeSheet1);
             excelWriter.write(data2, writeSheet2);
             excelWriter.write(data3, writeSheet3);
@@ -63,13 +66,16 @@ public class ExportService {
     }
 
 
-
+    /**
+     * 查分页、写入多个sheet
+     *
+     * @param response
+     * @throws IOException
+     */
     public void exportExcel3(HttpServletResponse response) throws IOException {
-
         setExportHeader(response);
 
         try (ExcelWriter excelWriter = EasyExcel.write(response.getOutputStream(), Salaries.class).build()) {
-
             Long count = salariesMapper.selectCount(null);
             Integer pages = 10;
             Long size = count / pages;
@@ -88,8 +94,11 @@ public class ExportService {
     }
 
 
+    /**
+     * 多线程查分页、多线程并发写入多个sheet（目前easyexcel不支持并发写入不同的sheet页）
+     * 官方：https://github.com/alibaba/easyexcel/issues/1040
+     */
     public void exportExcel4(HttpServletResponse response) throws IOException, InterruptedException {
-
         setExportHeader(response);
 
         Long count = salariesMapper.selectCount(null);
@@ -127,8 +136,6 @@ public class ExportService {
                 excelWriter.write(salariesPage.getRecords(), writeSheet);
             }
         }
-
-        // https://github.com/alibaba/easyexcel/issues/1040
     }
 
     private static void setExportHeader(HttpServletResponse response) {

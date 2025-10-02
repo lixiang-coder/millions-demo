@@ -2,11 +2,9 @@ package com.zhouyu.aspect;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.springframework.boot.SpringApplication;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
